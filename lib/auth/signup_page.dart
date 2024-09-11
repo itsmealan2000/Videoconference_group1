@@ -3,7 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:videoconference/pages/home_page.dart';
+import 'package:videoconference/auth/complete_profile.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -44,7 +44,7 @@ class _SignupPageState extends State<SignupPage> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomePage(),
+            builder: (context) => const CompleteProfile(),
           ));
     }
   }
