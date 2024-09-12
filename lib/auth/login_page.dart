@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:videoconference/pages/home_page.dart';
 import 'package:videoconference/auth/signup_page.dart';
 
@@ -37,7 +39,8 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     if (credential!=null) {
-      //String uid=credential.user!.uid;
+     
+     
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage(),));
     }
   }

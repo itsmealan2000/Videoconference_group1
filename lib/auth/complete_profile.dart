@@ -11,6 +11,7 @@ class CompleteProfile extends StatefulWidget {
 
 class _CompleteProfileState extends State<CompleteProfile> {
   TextEditingController fullnameController = TextEditingController();
+  TextEditingController numberController = TextEditingController();
 
   void checkValues(){
     Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage(),));
@@ -56,6 +57,22 @@ class _CompleteProfileState extends State<CompleteProfile> {
                   decoration: const InputDecoration(
                       border: InputBorder.none,
                       label: Text("Full Name"),
+                      labelStyle: TextStyle(fontSize: 20, color: Colors.white)),
+                ),
+              ),
+              
+                   Container(
+                margin: const EdgeInsets.only(top: 5,left: 20,right: 20),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black),
+                    borderRadius: BorderRadius.circular(15)),
+                child: TextField(
+                  style: TextStyle(color: Colors.grey.shade50),
+                  obscureText: false,
+                  controller: numberController,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      label: Text("Mobile Number"),
                       labelStyle: TextStyle(fontSize: 20, color: Colors.white)),
                 ),
               ),
