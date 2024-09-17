@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           const AuthPage(), // Replace with your page content
           Positioned(
-            bottom: 70, // Position above the footer
+            bottom: 20, // Position above the footer
             right: 20, // Right corner
             child: FloatingActionButton(
               onPressed: () async {
