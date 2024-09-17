@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:videoconference/auth/complete_profile.dart';
 
@@ -23,7 +24,9 @@ class _SignupPageState extends State<SignupPage> {
     String confirmPassword = confirmPwController.text.trim();
 
     if (email == "" || password == "" || confirmPassword == "") {
-      print("Please fill all the fields!!!");
+      if (kDebugMode) {
+        print("Please fill all the fields!!!");
+      }
     } else {
       if (password == confirmPassword) {
         signUp(email, password);
@@ -37,7 +40,9 @@ class _SignupPageState extends State<SignupPage> {
       credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      print(e.message.toString());
+      if (kDebugMode) {
+        print(e.message.toString());
+      }
     }
 
     if (credential != null) {

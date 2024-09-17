@@ -3,6 +3,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:videoconference/pages/home_page.dart';
@@ -23,7 +24,9 @@ class _LoginPageState extends State<LoginPage> {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
     if (email == "" || password == "") {
-      print("Please fill all the fields!!!");
+      if (kDebugMode) {
+        print("Please fill all the fields!!!");
+      }
     } else {
       signIn(email, password);
     }
@@ -35,7 +38,9 @@ class _LoginPageState extends State<LoginPage> {
       credential = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
     }on FirebaseAuthException catch (e) {
-      print(e.message.toString());
+      if (kDebugMode) {
+        print(e.message.toString());
+      }
     }
 
     if (credential!=null) {
