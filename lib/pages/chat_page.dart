@@ -7,10 +7,10 @@ class ChatPage extends StatefulWidget {
   const ChatPage({super.key, required this.contactName, required this.phoneNumber});
 
   @override
-  _ChatPageState createState() => _ChatPageState();
+  ChatPageState createState() => ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class ChatPageState extends State<ChatPage> {
   final List<String> messages = [];
   final TextEditingController _controller = TextEditingController();
 

@@ -5,7 +5,7 @@ import 'package:videoconference/components/bottomnavbar.dart';
 import 'package:videoconference/auth/login_page.dart'; // Import your login page
 import 'package:contacts_service/contacts_service.dart'; // Import for contacts
 import 'package:permission_handler/permission_handler.dart'; // Import for permissions
-import 'package:videoconference/pages/ChatPage.dart'; // Import your ChatPage
+import 'package:videoconference/pages/chat_page.dart'; // Import your ChatPage
 import 'package:videoconference/pages/contacts_page.dart'; // Import your ContactsPage
 
 class HomePage extends StatefulWidget {
@@ -16,10 +16,59 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load the current user once the state is initialized
+    user = FirebaseAuth.instance.currentUser;
+  }
+
+  Future<void> _logout() async {
+    await FirebaseAuth.instance.signOut();
+    if (!mounted) return;
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()), // Redirect to login page
+      (route) => false, // Remove all previous routes
+    );
+  }
+
+  Future<void> _handleContactsAccess() async {
+    final status = await Permission.contacts.request();
+    if (status.isGranted) {
+      List<Contact> contacts = await ContactsService.getContacts();
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ContactsPage(
+            contacts: contacts,
+            onContactSelected: (contact) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatPage(
+                    contactName: contact.displayName ?? 'No Name',
+                    phoneNumber: contact.phones?.first.value ?? 'No Number',
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Contacts permission denied')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home Page"),
@@ -33,18 +82,11 @@ class _HomePageState extends State<HomePage> {
             ),
             if (user != null) ...[
               const SizedBox(height: 20),
-              Text("Logged in as: ${user.email}"),
+              Text("Logged in as: ${user!.email}"),
               const SizedBox(height: 20),
               CupertinoButton(
                 color: Colors.blue,
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()), // Redirect to login page
-                    (route) => false, // Remove all previous routes
-                  );
-                },
+                onPressed: _logout,
                 child: const Text("Logout"),
               ),
             ],
@@ -52,36 +94,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        onPressed: _handleContactsAccess,
         child: const Icon(Icons.contacts),
-        onPressed: () async {
-          if (await Permission.contacts.request().isGranted) {
-            List<Contact> contacts = await ContactsService.getContacts();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ContactsPage(
-                  contacts: contacts,
-                  onContactSelected: (contact) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatPage(
-                          contactName: contact.displayName ?? 'No Name',
-                          phoneNumber: contact.phones?.first.value ?? 'No Number',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            );
-          } else {
-            // Handle permission denied case
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Contacts permission denied')),
-            );
-          }
-        },
       ),
       bottomNavigationBar: const BottomNavBar(),
     );
