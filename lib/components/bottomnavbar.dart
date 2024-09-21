@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:videoconference/pages/settings.dart';
+import 'package:videoconference/pages/home_page.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -12,7 +14,15 @@ class BottomNavBar extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.chat),
             onPressed: () {
-              // Chat button functionality
+              Navigator.pushReplacement(
+                context, 
+                PageRouteBuilder(
+                  pageBuilder: 
+                    (context, animation, secondaryAnimation) => const HomePage(),
+                  transitionDuration: Duration.zero,  // Disable transition duration
+                  reverseTransitionDuration: Duration.zero,  // Disable reverse transition duration
+                ),
+              );
             },
           ),
           IconButton(
@@ -30,7 +40,14 @@ class BottomNavBar extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              // Settings button functionality
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const Settings(),
+                  transitionDuration: Duration.zero,  // Disable transition duration
+                  reverseTransitionDuration: Duration.zero,  // Disable reverse transition duration
+                ),
+              );
             },
           ),
         ],
