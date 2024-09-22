@@ -1,7 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Firebase Authentication
+import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore
 import 'package:videoconference/components/bottomnavbar.dart'; // Import BottomNavBar
 import 'package:videoconference/auth/login_page.dart'; // Import LoginPage
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -12,12 +15,37 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   User? user;
+  String fullName = '';
 
   @override
   void initState() {
     super.initState();
     // Fetch the current user
     user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Fetch the full name from Firestore
+      _fetchFullName(user!.email!);
+    }
+  }
+
+  Future<void> _fetchFullName(String email) async {
+    try {
+      // Query Firestore for the user's full name
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .get();
+
+      if (snapshot.exists) {
+        setState(() {
+          fullName = snapshot['fullName'] ?? ''; // Get full name
+        });
+      }
+    }
+    catch (e) {
+      Fluttertoast.showToast(msg: 'Error fetching full name: $e');
+    }
   }
 
   Future<void> _logout() async {
@@ -29,10 +57,6 @@ class _SettingsState extends State<Settings> {
           builder: (context) => const LoginPage()), // Navigate to login page
       (route) => false, // Remove all previous routes
     );
-  }
-
-  String getUserNameFromEmail(String email) {
-    return email.split('@').first;
   }
 
   void _confirmLogout(BuildContext context) {
@@ -69,7 +93,8 @@ class _SettingsState extends State<Settings> {
           if (user != null) ...[
             ListTile(
               leading: const Icon(Icons.person),
-              title: Text('Welcome ${getUserNameFromEmail(user!.email!.toUpperCase())}'),
+              title: Text(
+                  'Welcome ${fullName.isNotEmpty ? fullName : user!.email}'),
               subtitle: Text('Logged in as ${user!.email}'),
             ),
             const Divider(),
@@ -82,34 +107,6 @@ class _SettingsState extends State<Settings> {
         ],
       ),
       bottomNavigationBar: const BottomNavBar(),
-    );
-  }
-}
-
-class SettingsOption extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  const SettingsOption({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          leading: Icon(icon),
-          title: Text(title),
-          subtitle: Text(subtitle),
-          trailing: const Icon(Icons.arrow_forward_ios),
-        ),
-        const Divider(),
-      ],
     );
   }
 }
