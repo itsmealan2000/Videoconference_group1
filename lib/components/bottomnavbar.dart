@@ -44,8 +44,8 @@ class BottomNavBar extends StatelessWidget {
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) => const Settings(),
-                  transitionDuration: Duration.zero,  // Disable transition duration
-                  reverseTransitionDuration: Duration.zero,  // Disable reverse transition duration
+                  transitionDuration: Duration.zero,  
+                  reverseTransitionDuration: Duration.zero,  
                 ),
               );
             },
