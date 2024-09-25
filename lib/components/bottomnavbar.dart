@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:videoconference/pages/settings.dart';
 import 'package:videoconference/pages/home_page.dart';
+import 'package:videoconference/pages/history.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -28,7 +29,15 @@ class BottomNavBar extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.history),
             onPressed: () {
-              // Voice call button functionality
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: 
+                    (context, animation, secondaryAnimation) => const HistoryPage(),
+                  transitionDuration: Duration.zero,  // Disable transition duration
+                  reverseTransitionDuration: Duration.zero,  // Disable reverse transition duration
+                ),
+              );
             },
           ),
           IconButton(

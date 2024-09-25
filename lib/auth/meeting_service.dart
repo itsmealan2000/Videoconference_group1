@@ -21,6 +21,7 @@ class MeetingService {
         },
         featureFlags: {
           FeatureFlags.welcomePageEnabled: false,
+          FeatureFlags.chatEnabled: true,
         },
         userInfo: JitsiMeetUserInfo(
           displayName: username,
@@ -35,6 +36,34 @@ class MeetingService {
       await jitsiMeet.join(options);
     } catch (error) {
       throw Exception('Error starting the meeting: $error');
+    }
+  }
+
+  // Join an existing meeting
+  Future<void> joinMeeting(String roomCode, String username, String email) async {
+    try {
+      var jitsiMeet = JitsiMeet();
+      var options = JitsiMeetConferenceOptions(
+        serverURL: "https://jitsi.rptu.de/$roomCode",
+        room: roomCode,
+        configOverrides: {
+          'startWithAudioMuted': true,
+          'startWithVideoMuted': true,
+        },
+        featureFlags: {
+          FeatureFlags.welcomePageEnabled: false,
+          FeatureFlags.chatEnabled: true,
+        },
+        userInfo: JitsiMeetUserInfo(
+          displayName: username,
+          email: email,
+        ),
+      );
+
+      // Join the meeting
+      await jitsiMeet.join(options);
+    } catch (error) {
+      throw Exception('Error joining the meeting: $error');
     }
   }
 
