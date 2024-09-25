@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Firebase Authentication
 import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore
 import 'package:videoconference/components/bottomnavbar.dart'; // Import BottomNavBar
 import 'package:videoconference/auth/login_page.dart'; // Import LoginPage
+import 'package:videoconference/components/manage_user.dart'; // Import ManageUserDataPage
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Settings extends StatefulWidget {
@@ -96,6 +96,15 @@ class _SettingsState extends State<Settings> {
               title: Text(
                   'Welcome ${fullName.isNotEmpty ? fullName : user!.email}'),
               subtitle: Text('Logged in as ${user!.email}'),
+              onTap: () {
+                // Navigate to the Manage User Data page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ManageUserDataPage(),
+                  ),
+                );
+              },
             ),
             const Divider(),
           ],

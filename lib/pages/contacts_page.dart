@@ -37,8 +37,9 @@ class ContactsPage extends StatelessWidget {
 
   // Generate unique chat ID based on current user and contact's phone number
   String generateChatId(String currentUser, String? phoneNumber) {
-    if (phoneNumber == null || phoneNumber.isEmpty)
+    if (phoneNumber == null || phoneNumber.isEmpty) {
       return ''; // Handle empty phone numbers
+    }
     return currentUser.compareTo(phoneNumber) > 0
         ? '$currentUser _$phoneNumber'
         : '$phoneNumber _$currentUser';
@@ -152,6 +153,7 @@ class ContactsPage extends StatelessWidget {
                   await addRecentChatToFirestore(
                       displayName, firestorePhoneNumber);
                   // Navigate to chat screen
+
                 },
               );
             },

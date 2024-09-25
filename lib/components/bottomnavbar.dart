@@ -12,7 +12,7 @@ class BottomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
-            icon: const Icon(Icons.chat),
+            icon: const Icon(Icons.home),
             onPressed: () {
               Navigator.pushReplacement(
                 context, 
@@ -26,15 +26,9 @@ class BottomNavBar extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.call),
+            icon: const Icon(Icons.history),
             onPressed: () {
               // Voice call button functionality
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.videocam),
-            onPressed: () {
-              // Video call button functionality
             },
           ),
           IconButton(
