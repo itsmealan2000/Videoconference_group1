@@ -1,10 +1,6 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
             "name": "Flutter: Attach to Device",
             "type": "dart",
@@ -26,6 +22,13 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
+        },
+        {
+            "name": "videoconference (Flutter GM1911)",
+            "program": "lib/main.dart",
+            "deviceId": "d9476800",
+            "request": "launch",
+            "type": "dart"
         }
     ]
 }

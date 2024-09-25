@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   String? activeMeetingCode; // Variable to store active meeting code
 
   // Function to fetch current user's name from Firestore
-  Future<String> getCurrentUserName() async {
+  Future<String?> getCurrentUserName() async {
     User? user = FirebaseAuth.instance.currentUser; // Get the current user
     if (user != null) {
       try {
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
         throw Exception('Error fetching user details: $e');
       }
     } else {
-      throw Exception('No user is signed in');
+      return null; // Return null if no user is signed in
     }
   }
 
@@ -47,9 +47,13 @@ class _HomePageState extends State<HomePage> {
   Future<void> _startMeeting() async {
     try {
       // Get the current user's name
-      String currentUserName = await getCurrentUserName();
-      String userId =
-          FirebaseAuth.instance.currentUser!.uid; // Get current user's UID
+      String? currentUserName = await getCurrentUserName();
+      if (currentUserName == null) {
+        throw Exception('User not signed in or name not found');
+      }
+      
+      // Get current user's email instead of UID
+      String email = FirebaseAuth.instance.currentUser!.email ?? ''; // Get current user's email
 
       // Generate a random room code or use a timestamp
       String roomCode = DateTime.now().millisecondsSinceEpoch.toString();
@@ -61,10 +65,8 @@ class _HomePageState extends State<HomePage> {
       await meetingService.createMeeting(
         roomCode: roomCode,
         username: currentUserName,
+        email: email,
       );
-
-      // Save meeting details to Firestore for history
-      await meetingService.saveMeeting(roomCode, userId, currentUserName);
 
       // Safely update the UI after async call
       if (!mounted) return;
@@ -83,7 +85,7 @@ class _HomePageState extends State<HomePage> {
   // Function to copy meeting code to clipboard
   void _copyMeetingCode() {
     if (activeMeetingCode != null) {
-      Clipboard.setData(ClipboardData(text: '$activeMeetingCode'));
+      Clipboard.setData(ClipboardData(text: activeMeetingCode!));
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Meeting code copied to clipboard!')),
       );
@@ -93,8 +95,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> _handleContactsNavigation() async {
     try {
       // Fetch the current user's name and contacts asynchronously
-      String currentUserName = await getCurrentUserName();
-      List<Contact> contacts = await ContactsService.getContacts();
+      String? currentUserName = await getCurrentUserName();
+      List<Contact> contacts = (await ContactsService.getContacts()).toList();
 
       // Navigate to ContactsPage only if the widget is still mounted
       if (mounted) {
@@ -102,7 +104,7 @@ class _HomePageState extends State<HomePage> {
           context,
           MaterialPageRoute(
             builder: (context) => ContactsPage(
-              currentUser: currentUserName, // Pass the current user name
+              currentUser: currentUserName ?? 'Unknown User', // Handle null case
               contacts: contacts,
               onContactSelected: (contact) {
                 // Handle contact selection
@@ -124,7 +126,7 @@ class _HomePageState extends State<HomePage> {
   // Function to share the meeting code
   void _shareMeetingCode() {
     if (activeMeetingCode != null) {
-      Share.share('Join my meeting with code: $activeMeetingCode');
+      Share.share('Join my meeting with code: https://jitsi.rptu.de/$activeMeetingCode');
     }
   }
 
@@ -141,16 +143,14 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               ElevatedButton(
                 onPressed: _startMeeting, // No need to pass context here
-                child:
-                    const Text("Start Meeting", style: TextStyle(fontSize: 20)),
+                child: const Text("Start Meeting", style: TextStyle(fontSize: 20)),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Join Meeting button functionality
+                  // Add functionality to join meeting here
                 },
-                child:
-                    const Text("Join Meeting", style: TextStyle(fontSize: 20)),
+                child: const Text("Join Meeting", style: TextStyle(fontSize: 20)),
               ),
               const SizedBox(height: 20),
               if (activeMeetingCode != null)
@@ -163,8 +163,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         const Text(
                           'Active Meeting Code:',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 10),
                         Row(
@@ -196,9 +195,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _handleContactsNavigation(); // Call the refactored method for handling the button press
-        },
+        onPressed: _handleContactsNavigation,
         child: const Icon(Icons.contacts),
       ),
       bottomNavigationBar: const BottomNavBar(),
