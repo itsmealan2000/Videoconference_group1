@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Firebase Authentication
-import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore
-import 'package:videoconference/components/bottomnavbar.dart'; // Import BottomNavBar
-import 'package:videoconference/auth/login_page.dart'; // Import LoginPage
-import 'package:videoconference/components/manage_user.dart'; // Import ManageUserDataPage
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:videoconference/components/bottomnavbar.dart';
+import 'package:videoconference/auth/login_page.dart';
+import 'package:videoconference/components/manage_user.dart';
+import 'package:videoconference/Theme/themeprovidor.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Settings extends StatefulWidget {
@@ -42,8 +44,7 @@ class _SettingsState extends State<Settings> {
           fullName = snapshot['fullName'] ?? ''; // Get full name
         });
       }
-    }
-    catch (e) {
+    } catch (e) {
       Fluttertoast.showToast(msg: 'Error fetching full name: $e');
     }
   }
@@ -102,6 +103,27 @@ class _SettingsState extends State<Settings> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const ManageUserDataPage(),
+                  ),
+                );
+              },
+            ),
+            SizedBox(
+              height: 3,
+              width: 5,
+              child: DecoratedBox(
+                  decoration: BoxDecoration(
+                color: Colors.deepPurple,
+                borderRadius: BorderRadius.circular(15),
+              )),
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings_display_rounded),
+              title: const Text('Theme'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Themeprovidor(),
                   ),
                 );
               },

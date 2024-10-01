@@ -89,12 +89,11 @@ class _SignupPageState extends State<SignupPage> {
               height: double.infinity,
               width: double.infinity,
               decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                Color.fromARGB(255, 169, 37, 240),
-                Color.fromARGB(255, 51, 215, 227)
-              ])),
+                color: Colors.black
+              ),
             ),
-            Column(
+            SingleChildScrollView(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Header
@@ -125,6 +124,16 @@ class _SignupPageState extends State<SignupPage> {
                     ],
                   ),
                 ),
+                Container(
+                width: 300,
+                height: 300,
+                  decoration: const BoxDecoration(
+                  image : DecorationImage(
+                    image: AssetImage('assets/bg/1.png'),
+                    fit: BoxFit.contain,
+                    ),
+                ),
+                ),
                 // Input Fields
                 Padding(
                   padding: const EdgeInsets.all(20),
@@ -134,11 +143,22 @@ class _SignupPageState extends State<SignupPage> {
                       const SizedBox(height: 15),
                       _buildTextField(passwordController, "Password", true),
                       const SizedBox(height: 15),
-                      _buildTextField(confirmPwController, "Confirm Password", true),
+                      _buildTextField(
+                          confirmPwController, "Confirm Password", true),
                       const SizedBox(height: 20),
                       _buildSignUpButton(),
                     ],
                   ),
+                ),
+                Container(
+                width: 150,
+                height: 150,
+                  decoration: const BoxDecoration(
+                  image : DecorationImage(
+                    image: AssetImage('assets/bg/2.png'),
+                    fit: BoxFit.contain,
+                    ),
+                ),
                 ),
                 // Sign In Link
                 Container(
@@ -147,15 +167,16 @@ class _SignupPageState extends State<SignupPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                       Text(
+                      Text(
                         "Already have an account? ",
-                        style: TextStyle(color: Colors.grey.shade100, fontSize: 16),
+                        style: TextStyle(
+                            color: Colors.grey.shade100, fontSize: 16),
                       ),
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child:  Text("Sign In ",
+                        child: Text("Sign In ",
                             style: TextStyle(
                                 color: Colors.grey.shade100,
                                 fontSize: 20,
@@ -166,16 +187,19 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               ],
             ),
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, bool isObscure) {
+  Widget _buildTextField(
+      TextEditingController controller, String label, bool isObscure) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.black),
+        border: Border.all(
+            width: 1, color: const Color.fromARGB(255, 255, 255, 255)),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(
@@ -183,9 +207,17 @@ class _SignupPageState extends State<SignupPage> {
         style: TextStyle(color: Colors.grey.shade50),
         controller: controller,
         decoration: InputDecoration(
-          border: InputBorder.none,
+          border:OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+            borderRadius: BorderRadius.circular(15),
+          ),
           label: Text(label),
-          labelStyle: const TextStyle(fontSize: 20, color: Colors.white),
+          labelStyle: const TextStyle(
+            fontSize: 25, 
+            color: Colors.white
+            ),
         ),
       ),
     );
@@ -228,24 +260,28 @@ class _CompleteProfileState extends State<CompleteProfile> {
     if (fullName.isNotEmpty && mobileNumber.isNotEmpty) {
       await saveProfileToFirestore(fullName, mobileNumber);
       Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-          (route) => false, 
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+        (route) => false,
       );
     } else {
       if (kDebugMode) {
         ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill all fields!")),
-      );
+          const SnackBar(content: Text("Please fill all fields!")),
+        );
       }
     }
   }
 
-  Future<void> saveProfileToFirestore(String fullName, String mobileNumber) async {
+  Future<void> saveProfileToFirestore(
+      String fullName, String mobileNumber) async {
     User? currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser != null) {
-      await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).update({
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .update({
         'fullName': fullName,
         'mobileNumber': mobileNumber,
       });
@@ -309,8 +345,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
   Widget _buildTextField(TextEditingController controller, String label) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(width: 1, color:
-        Colors.black),
+        border: Border.all(width: 1, color: Colors.black),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(

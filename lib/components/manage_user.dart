@@ -50,7 +50,7 @@ class _ManageUserDataPageState extends State<ManageUserDataPage> {
           _isEditing = true; // Set editing mode if data exists
         });
       } else {
-        Fluttertoast.showToast(msg: 'User not found in Firestore.');
+        Fluttertoast.showToast(msg: 'User Details Not Filled.');
       }
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error fetching user data: $e');
