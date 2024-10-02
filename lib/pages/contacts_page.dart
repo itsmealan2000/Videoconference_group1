@@ -5,7 +5,7 @@ import 'package:contacts_service/contacts_service.dart';
 class ContactsPage extends StatelessWidget {
   final List<Contact> contacts;
   final Function(Contact) onContactSelected;
-  final String currentUser; // Holds the current user's identifier
+  final String currentUser;
 
   const ContactsPage({
     super.key,
@@ -58,7 +58,7 @@ class ContactsPage extends StatelessWidget {
 
       await FirebaseFirestore.instance.collection('recentChats').add(chatData);
     } catch (e) {
-      // Handle error if necessary
+      // Handle 
     }
   }
 
@@ -118,7 +118,6 @@ class ContactsPage extends StatelessWidget {
                   ? normalizePhoneNumber(localContact.phones!.first.value)
                   : null;
 
-              // Get corresponding Firestore contact or use default values
               final firestoreContact = firestoreContacts.firstWhere(
                 (firestoreContact) {
                   final firestorePhoneNumber =
@@ -139,7 +138,7 @@ class ContactsPage extends StatelessWidget {
                   displayName.trim().toLowerCase() ==
                       currentUser.trim().toLowerCase()) {
                 return const SizedBox
-                    .shrink(); // Return an empty widget to skip current user
+                    .shrink(); 
               }
 
               // Only show contacts with a valid phone number
@@ -149,10 +148,8 @@ class ContactsPage extends StatelessWidget {
                 title: Text(displayName),
                 subtitle: Text(firestorePhoneNumber),
                 onTap: () async {
-                  // Add new chat to recent chats in Firestore
                   await addRecentChatToFirestore(
                       displayName, firestorePhoneNumber);
-                  // Navigate to chat screen
 
                 },
               );

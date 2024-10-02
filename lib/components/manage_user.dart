@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Firebase Authentication
-import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore
+import 'package:firebase_auth/firebase_auth.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart'; 
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ManageUserDataPage extends StatefulWidget {
@@ -44,10 +44,10 @@ class _ManageUserDataPageState extends State<ManageUserDataPage> {
           fullName = snapshot['fullName'] ?? 'No name available';
           email = snapshot['email'] ?? 'No email available';
           phoneNumber = snapshot['mobileNumber'] ?? 'No phone number available';
-          _fullNameController.text = fullName; // Populate the text fields
+          _fullNameController.text = fullName; 
           _emailController.text = email;
           _phoneNumberController.text = phoneNumber;
-          _isEditing = true; // Set editing mode if data exists
+          _isEditing = true; 
         });
       } else {
         Fluttertoast.showToast(msg: 'User Details Not Filled.');
@@ -113,7 +113,7 @@ class _ManageUserDataPageState extends State<ManageUserDataPage> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    _isEditing = true; // Switch to editing mode
+                    _isEditing = true; 
                   });
                 },
                 child: const Text('Add Details'),

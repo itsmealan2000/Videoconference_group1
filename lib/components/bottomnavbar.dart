@@ -20,8 +20,8 @@ class BottomNavBar extends StatelessWidget {
                 PageRouteBuilder(
                   pageBuilder: 
                     (context, animation, secondaryAnimation) => const HomePage(),
-                  transitionDuration: Duration.zero,  // Disable transition duration
-                  reverseTransitionDuration: Duration.zero,  // Disable reverse transition duration
+                  transitionDuration: Duration.zero,  
+                  reverseTransitionDuration: Duration.zero,  
                 ),
               );
             },
@@ -34,8 +34,8 @@ class BottomNavBar extends StatelessWidget {
                 PageRouteBuilder(
                   pageBuilder: 
                     (context, animation, secondaryAnimation) => const HistoryPage(),
-                  transitionDuration: Duration.zero,  // Disable transition duration
-                  reverseTransitionDuration: Duration.zero,  // Disable reverse transition duration
+                  transitionDuration: Duration.zero,  
+                  reverseTransitionDuration: Duration.zero,  
                 ),
               );
             },

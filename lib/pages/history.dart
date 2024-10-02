@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Firebase Authentication
-import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore
-import 'package:videoconference/components/bottomnavbar.dart'; // Import BottomNavBar
+import 'package:firebase_auth/firebase_auth.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'package:videoconference/components/bottomnavbar.dart'; 
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -23,9 +23,8 @@ class HistoryPageState extends State<HistoryPage> {
     // Fetch current user
     user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      _meetings = _fetchUserDetails(); // Initialize _meetings directly
+      _meetings = _fetchUserDetails();
     } else {
-      // Handle case when user is not logged in
       _meetings = Future.value([]);
     }
   }
@@ -38,9 +37,9 @@ class HistoryPageState extends State<HistoryPage> {
         if (userDoc.exists) {
           setState(() {
             username =
-                userDoc['fullName'] ?? user!.email; // Get full name or email
+                userDoc['fullName'] ?? user!.email; 
           });
-          return await _fetchMeetings(); // Fetch meetings after getting username
+          return await _fetchMeetings(); 
         }
       } catch (e) {
         throw ('Error fetching user details: $e');
@@ -50,7 +49,6 @@ class HistoryPageState extends State<HistoryPage> {
   }
 
   Future<List<Map<String, dynamic>>> _fetchMeetings() async {
-    // Ensure user is not null
     if (user == null || username == null) {
       return [];
     }
@@ -58,10 +56,9 @@ class HistoryPageState extends State<HistoryPage> {
     try {
       QuerySnapshot snapshot = await _firestore
           .collection('meetings')
-          .where('username', isEqualTo: username) // Use fetched username for filtering
+          .where('username', isEqualTo: username) 
           .get();
 
-      // Group meetings by roomCode and track earliest timestamp and username
       Map<String, Map<String, dynamic>> meetingsMap = {};
 
       for (var doc in snapshot.docs) {
@@ -72,7 +69,6 @@ class HistoryPageState extends State<HistoryPage> {
         // Convert createdAt to DateTime for comparison
         DateTime createdAtDateTime = createdAt.toDate();
 
-        // If roomCode is not already in the map, or if this timestamp is earlier
         if (!meetingsMap.containsKey(roomCode) ||
             (meetingsMap[roomCode]!['createdAt'] as Timestamp).toDate().isAfter(createdAtDateTime)) {
           meetingsMap[roomCode] = {
@@ -82,7 +78,6 @@ class HistoryPageState extends State<HistoryPage> {
         }
       }
 
-      // Convert the map back to a list
       List<Map<String, dynamic>> meetings = meetingsMap.entries.map((entry) {
         return {
           'roomCode': entry.key,
@@ -91,7 +86,6 @@ class HistoryPageState extends State<HistoryPage> {
         };
       }).toList();
 
-      // Sort the meetings by createdAt in descending order
       meetings.sort(
           (a, b) => (b['createdAt'] as Timestamp).compareTo(a['createdAt']));
 
@@ -101,7 +95,7 @@ class HistoryPageState extends State<HistoryPage> {
     }
   }
 
-  // Format the date manually
+  // Format the date 
   String formatDate(DateTime date) {
     String hour = date.hour % 12 == 0
         ? '12'
@@ -119,7 +113,7 @@ class HistoryPageState extends State<HistoryPage> {
         title: const Text('Meeting History'),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _meetings, // Use FutureBuilder to wait for meetings
+        future: _meetings, 
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -154,7 +148,7 @@ class HistoryPageState extends State<HistoryPage> {
                         fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   subtitle: Text(
-                    '${meeting['username']} - ${formatDate(createdAt.toLocal())}', // Display formatted meeting details
+                    '${meeting['username']} - ${formatDate(createdAt.toLocal())}',
                     style: const TextStyle(color: Colors.grey),
                   ),
                 ),

@@ -33,7 +33,6 @@ class _SettingsState extends State<Settings> {
 
   Future<void> _fetchFullName(String email) async {
     try {
-      // Query Firestore for the user's full name
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(user!.uid)
@@ -55,8 +54,8 @@ class _SettingsState extends State<Settings> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-          builder: (context) => const LoginPage()), // Navigate to login page
-      (route) => false, // Remove all previous routes
+          builder: (context) => const LoginPage()), 
+      (route) => false, 
     );
   }
 
@@ -73,8 +72,8 @@ class _SettingsState extends State<Settings> {
           ),
           TextButton(
             onPressed: () {
-              _logout(); // Perform logout
-              Navigator.pop(context); // Close dialog
+              _logout(); 
+              Navigator.pop(context); 
             },
             child: const Text('Logout'),
           ),

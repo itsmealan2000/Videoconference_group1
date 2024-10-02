@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
               currentUser: currentUserName ?? 'Unknown User',
               contacts: contacts,
               onContactSelected: (contact) {
-                // Handle contact selection
+                
               },
             ),
           ),

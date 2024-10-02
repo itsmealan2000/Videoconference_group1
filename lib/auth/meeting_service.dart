@@ -81,7 +81,7 @@ class MeetingService {
     }
   }
 
-  // Fetch meeting history for a specific user
+  // Fetch meeting history
   Stream<QuerySnapshot> getMeetingHistory(String email) {
     return meetingCollection.where('email', isEqualTo: email).snapshots();
   }

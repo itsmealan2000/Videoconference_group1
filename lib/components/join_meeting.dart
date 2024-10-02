@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Cloud Firestore
-import 'package:videoconference/auth/meeting_service.dart'; // Import the MeetingService
+import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'package:videoconference/auth/meeting_service.dart';
 
 class JoinMeeting extends StatefulWidget {
   final String username;
@@ -58,11 +58,10 @@ class JoinMeetingState extends State<JoinMeeting> {
 
   Future<bool> _validateRoomCode(String roomCode) async {
     try {
-      // Reference to Firestore
       CollectionReference meetings =
           FirebaseFirestore.instance.collection('meetings');
 
-      // Query to check if the room code exists
+      // check if the room code exists
       QuerySnapshot querySnapshot =
           await meetings.where('roomCode', isEqualTo: roomCode).get();
 

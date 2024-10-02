@@ -173,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 100), // Space for better layout
+                  const SizedBox(height: 100), 
                   // Sign up section at the bottom
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
