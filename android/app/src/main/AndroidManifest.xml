@@ -9,7 +9,7 @@
     <application
         android:label="videoconference"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher_icon"
         tools:replace="android:label"> <!-- Ensure tools:replace is here -->
         <activity
             android:name=".MainActivity"

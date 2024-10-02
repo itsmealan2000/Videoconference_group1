@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,6 +20,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   User? user;
   String fullName = '';
+  //String? imageUrl;
 
   @override
   void initState() {
@@ -28,8 +31,26 @@ class _SettingsState extends State<Settings> {
     if (user != null) {
       // Fetch the full name from Firestore
       _fetchFullName(user!.email!);
+      
+      // Only fetch profile pic if photoURL is not null
+      // if (user!.photoURL != null) {
+      //   _fetchProfilePic(user!.photoURL!);
+      // }
     }
   }
+
+  // Future<void> _fetchProfilePic(String photoURL) async {
+  //   try {
+  //     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
+  //     if (snapshot.exists) {
+  //       setState(() {
+  //         imageUrl = snapshot['profilepic'] ?? ''; // get profile pic
+  //       });
+  //     }
+  //   } catch (e) {
+  //     Fluttertoast.showToast(msg: 'Error fetching profile pic: $e');
+  //   }
+  // }
 
   Future<void> _fetchFullName(String email) async {
     try {
@@ -92,7 +113,14 @@ class _SettingsState extends State<Settings> {
         children: [
           if (user != null) ...[
             ListTile(
-              leading: const Icon(Icons.person),
+              // leading: CircleAvatar(
+              //   backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
+              //     ? NetworkImage(imageUrl!) // Use the image URL fetched from Firestore
+              //     : null, // Display default avatar if no image is available
+              //   child: imageUrl == null || imageUrl!.isEmpty
+              //     ? const Icon(Icons.person)
+              //     : null, // Show icon if no image
+              // ),
               title: Text(
                   'Welcome ${fullName.isNotEmpty ? fullName : user!.email}'),
               subtitle: Text('Logged in as ${user!.email}'),

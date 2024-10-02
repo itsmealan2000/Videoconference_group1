@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 60), // Space at the top
+                  const SizedBox(height: 40), // Space at the top
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -160,20 +160,41 @@ class _LoginPageState extends State<LoginPage> {
                     elevation: 5,
                     shadowColor: Colors.black,
                     borderRadius: BorderRadius.circular(15),
-                    child: CupertinoButton(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 140, vertical: 20),
-                      borderRadius: BorderRadius.circular(15),
-                      onPressed: checkValues,
-                      color: Colors.yellow.shade400,
-                      child: Text(
-                        'SIGN IN',
-                        style: TextStyle(
-                            color: Colors.grey.shade900, fontSize: 22),
+                    // child: CupertinoButton(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 140, vertical: 20),
+                    //   borderRadius: BorderRadius.circular(15),
+                    //   onPressed: checkValues,
+                    //   color: Colors.yellow.shade400,
+                    //   child: Text(
+                    //     'SIGN IN',
+                    //     style: TextStyle(
+                    //         color: Colors.grey.shade900, fontSize: 22),
+                    //   ),
+                    // ),
+                    child: GestureDetector(
+                      onTap: checkValues,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width/1.115,
+                        height: MediaQuery.of(context).size.height / 14,
+
+                        //padding: const EdgeInsets.symmetric(horizontal: 140,vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.yellow.shade400,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Center(
+                            child: Text(
+                          'SIGN IN',
+                          style: TextStyle(
+                            color: Colors.grey.shade900,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 100), 
+                  const SizedBox(height: 70),
                   // Sign up section at the bottom
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -181,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         "Don't have an account? ",
                         style: TextStyle(
-                            color: Colors.grey.shade100, fontSize: 16),
+                            color: Colors.grey.shade100, fontSize: 15),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -195,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                           "Sign Up",
                           style: TextStyle(
                             color: Colors.grey.shade100,
-                            fontSize: 20,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
