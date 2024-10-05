@@ -1,7 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:videoconference/pages/home_page.dart';
-class CompleteProfile extends StatefulWidget {
 
+class CompleteProfile extends StatefulWidget {
   const CompleteProfile({super.key});
 
   @override
@@ -22,13 +19,12 @@ class _CompleteProfileState extends State<CompleteProfile> {
   final TextEditingController numberController = TextEditingController();
   File? _selectedImage;
 
-
-  Future<void> _pickImage()async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? _imageUrl = await _picker.pickImage(source: ImageSource.gallery);
-    if (_imageUrl!=null) {
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker(); // Renamed from _picker to picker
+    final XFile? imageUrl = await picker.pickImage(source: ImageSource.gallery);
+    if (imageUrl != null) {
       setState(() {
-        _selectedImage = File(_imageUrl.path);
+        _selectedImage = File(imageUrl.path);
       });
     }
   }
@@ -36,10 +32,11 @@ class _CompleteProfileState extends State<CompleteProfile> {
   void checkValues() async {
     String fullName = fullnameController.text.trim();
     String mobileNumber = numberController.text.trim();
-    File? image=_selectedImage;
+    File? image = _selectedImage;
 
     if (fullName.isNotEmpty && mobileNumber.isNotEmpty) {
-      await saveProfileToFirestore(fullName, mobileNumber,image!);
+      await saveProfileToFirestore(fullName, mobileNumber, image);
+      if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
@@ -55,7 +52,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
   }
 
   Future<void> saveProfileToFirestore(
-      String fullName, String mobileNumber,File image) async {
+      String fullName, String mobileNumber, File? image) async {
     User? currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser != null) {
@@ -65,12 +62,11 @@ class _CompleteProfileState extends State<CompleteProfile> {
           .update({
         'fullName': fullName,
         'mobileNumber': mobileNumber,
-        'profilepic': image.toString()
+        'profilepic':
+           image?.toString(), // Save null if no image
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -98,12 +94,16 @@ class _CompleteProfileState extends State<CompleteProfile> {
                   child: CircleAvatar(
                     radius: 70,
                     backgroundColor: const Color.fromARGB(255, 67, 138, 196),
-                    backgroundImage: (_selectedImage!=null)?FileImage(_selectedImage!):null,
-                    child: (_selectedImage == null)?Icon(
-                      Icons.person,
-                      size: 70,
-                      color: Colors.grey.shade50,
-                    ):null,
+                    backgroundImage: (_selectedImage != null)
+                        ? FileImage(_selectedImage!)
+                        : null,
+                    child: (_selectedImage == null)
+                        ? Icon(
+                            Icons.person,
+                            size: 70,
+                            color: Colors.grey.shade50,
+                          )
+                        : null,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -130,7 +130,10 @@ class _CompleteProfileState extends State<CompleteProfile> {
   Widget _buildTextField(TextEditingController controller, String label) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(width: 2, color: const Color.fromARGB(255, 245, 242, 239)),
+        border: Border.all(
+          width: 2,
+          color: const Color.fromARGB(255, 245, 242, 239),
+        ),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(
@@ -150,28 +153,25 @@ class _CompleteProfileState extends State<CompleteProfile> {
       elevation: 5,
       shadowColor: Colors.black,
       borderRadius: BorderRadius.circular(15),
-      // child: CupertinoButton(
-      //   padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 20),
-      //   borderRadius: BorderRadius.circular(15),
-      //   onPressed: checkValues,
-      //   color: Colors.yellow.shade400,
-      //   child: Text(
-      //     'Submit',
-      //     style: TextStyle(color: Colors.grey.shade900, fontSize: 22),
-      //   ),
-      // ),
-           child: GestureDetector(
+      child: GestureDetector(
         onTap: checkValues,
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height/15,
-          
-          //padding: const EdgeInsets.symmetric(horizontal: 140,vertical: 10),
+          height: MediaQuery.of(context).size.height / 15,
           decoration: BoxDecoration(
             color: Colors.yellow.shade400,
-            borderRadius: BorderRadius.circular(15)
+            borderRadius: BorderRadius.circular(15),
           ),
-          child: Center(child: Text('SUBMIT',style: TextStyle(color: Colors.grey.shade900,fontSize: 22,fontWeight: FontWeight.w500,),)),
+          child: Center(
+            child: Text(
+              'SUBMIT',
+              style: TextStyle(
+                color: Colors.grey.shade900,
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
         ),
       ),
     );
