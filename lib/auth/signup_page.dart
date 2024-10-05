@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:videoconference/pages/home_page.dart';
+import 'package:videoconference/auth/complete.dart';
+ import 'package:videoconference/auth/complete_profile.dart';
+//import 'package:videoconference/pages/home_page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -98,7 +98,7 @@ class _SignupPageState extends State<SignupPage> {
               children: [
                 // Header
                 Container(
-                  margin: const EdgeInsets.only(top: 40),
+                  margin: const EdgeInsets.only(top: 20),
                   child: Column(
                     children: [
                       Row(
@@ -125,8 +125,8 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
                 Container(
-                width: 300,
-                height: 300,
+                width: 280,
+                height: 280,
                   decoration: const BoxDecoration(
                   image : DecorationImage(
                     image: AssetImage('assets/bg/1.png'),
@@ -136,7 +136,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 // Input Fields
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(18),
                   child: Column(
                     children: [
                       _buildTextField(emailController, "Email", false),
@@ -150,16 +150,16 @@ class _SignupPageState extends State<SignupPage> {
                     ],
                   ),
                 ),
-                Container(
-                width: 150,
-                height: 150,
-                  decoration: const BoxDecoration(
-                  image : DecorationImage(
-                    image: AssetImage('assets/bg/2.png'),
-                    fit: BoxFit.contain,
-                    ),
-                ),
-                ),
+                // Container(
+                // width: 150,
+                // height: 150,
+                //   decoration: const BoxDecoration(
+                //   image : DecorationImage(
+                //     image: AssetImage('assets/bg/2.png'),
+                //     fit: BoxFit.contain,
+                //     ),
+                // ),
+                // ),
                 // Sign In Link
                 Container(
                   margin: const EdgeInsets.all(15),
@@ -168,7 +168,7 @@ class _SignupPageState extends State<SignupPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Already have an account? ",
+                        "Already have an account!!! ",
                         style: TextStyle(
                             color: Colors.grey.shade100, fontSize: 16),
                       ),
@@ -215,7 +215,7 @@ class _SignupPageState extends State<SignupPage> {
           ),
           label: Text(label),
           labelStyle: const TextStyle(
-            fontSize: 25, 
+            fontSize: 20, 
             color: Colors.white
             ),
         ),
@@ -228,153 +228,32 @@ class _SignupPageState extends State<SignupPage> {
       elevation: 5,
       shadowColor: Colors.black,
       borderRadius: BorderRadius.circular(15),
-      child: CupertinoButton(
-        padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 20),
-        borderRadius: BorderRadius.circular(15),
-        onPressed: checkValues,
-        color: Colors.yellow.shade400,
-        child: Text(
-          'SIGN UP',
-          style: TextStyle(color: Colors.grey.shade900, fontSize: 22),
+      // child: CupertinoButton(
+      //   padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 5),
+      //   borderRadius: BorderRadius.circular(15),
+      //   onPressed: checkValues,
+      //   color: Colors.yellow.shade400,
+      //   child: Text(
+      //     'Sign Up',
+      //     style: TextStyle(color: Colors.grey.shade900, fontSize: 15),
+      //   ),
+      // ),
+      child: GestureDetector(
+        onTap: checkValues,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height/15,
+          
+          //padding: const EdgeInsets.symmetric(horizontal: 140,vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.yellow.shade400,
+            borderRadius: BorderRadius.circular(15)
+          ),
+          child: Center(child: Text('SIGN UP',style: TextStyle(color: Colors.grey.shade900,fontSize: 22,fontWeight: FontWeight.bold,),)),
         ),
       ),
     );
   }
 }
 
-class CompleteProfile extends StatefulWidget {
-  const CompleteProfile({super.key});
 
-  @override
-  State<CompleteProfile> createState() => _CompleteProfileState();
-}
-
-class _CompleteProfileState extends State<CompleteProfile> {
-  final TextEditingController fullnameController = TextEditingController();
-  final TextEditingController numberController = TextEditingController();
-
-  void checkValues() async {
-    String fullName = fullnameController.text.trim();
-    String mobileNumber = numberController.text.trim();
-
-    if (fullName.isNotEmpty && mobileNumber.isNotEmpty) {
-      await saveProfileToFirestore(fullName, mobileNumber);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-        (route) => false,
-      );
-    } else {
-      if (kDebugMode) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please fill all fields!")),
-        );
-      }
-    }
-  }
-
-  Future<void> saveProfileToFirestore(
-      String fullName, String mobileNumber) async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-
-    if (currentUser != null) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUser.uid)
-          .update({
-        'fullName': fullName,
-        'mobileNumber': mobileNumber,
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 169, 37, 240),
-                    Color.fromARGB(255, 51, 215, 227)
-                  ],
-                ),
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CupertinoButton(
-                  onPressed: () {},
-                  child: CircleAvatar(
-                    radius: 70,
-                    backgroundColor: Colors.amber.shade300,
-                    child: Icon(
-                      Icons.person,
-                      size: 70,
-                      color: Colors.grey.shade50,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      _buildTextField(fullnameController, "Full Name"),
-                      const SizedBox(height: 5),
-                      _buildTextField(numberController, "Mobile Number"),
-                      const SizedBox(height: 20),
-                      _buildSubmitButton(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(TextEditingController controller, String label) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.black),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: TextField(
-        style: TextStyle(color: Colors.grey.shade50),
-        controller: controller,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          label: Text(label),
-          labelStyle: const TextStyle(fontSize: 20, color: Colors.white),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    return Material(
-      elevation: 5,
-      shadowColor: Colors.black,
-      borderRadius: BorderRadius.circular(15),
-      child: CupertinoButton(
-        padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 20),
-        borderRadius: BorderRadius.circular(15),
-        onPressed: checkValues,
-        color: Colors.yellow.shade400,
-        child: Text(
-          'Submit',
-          style: TextStyle(color: Colors.grey.shade900, fontSize: 22),
-        ),
-      ),
-    );
-  }
-}
